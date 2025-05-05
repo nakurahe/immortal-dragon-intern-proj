@@ -4,6 +4,7 @@ const { logger } = require('../../utils/logger');
 class OpenAIService {
   constructor() {
     this.openai = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
       apiKey: process.env.OPENAI_API_KEY
     });
   }
@@ -49,7 +50,7 @@ class OpenAIService {
       
       // Call OpenAI API
       const response = await this.openai.chat.completions.create({
-        model: "gpt-4-turbo-preview",
+        model: "microsoft/phi-4-reasoning-plus:free",
         messages: [
           {
             role: "system",
@@ -93,7 +94,7 @@ class OpenAIService {
   async processChat(messages) {
     try {
       const response = await this.openai.chat.completions.create({
-        model: "gpt-4-turbo-preview",
+        model: "microsoft/phi-4-reasoning-plus:free",
         messages: [
           {
             role: "system",
