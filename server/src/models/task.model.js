@@ -101,6 +101,6 @@ taskSchema.pre('save', function(next) {
   next();
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model('task', taskSchema);
 
 module.exports = Task;

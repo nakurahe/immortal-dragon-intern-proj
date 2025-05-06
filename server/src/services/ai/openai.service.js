@@ -67,19 +67,20 @@ class OpenAIService {
       
       // Parse the response to get JSON
       const content = response.choices[0].message.content;
-      try {
-        return JSON.parse(content);
-      } catch (parseError) {
-        logger.error('Error parsing OpenAI response:', parseError);
+      console.log('OpenAI response:', content);
+      // try {
+      //   return JSON.parse(content);
+      // } catch (parseError) {
+      //   logger.error('Error parsing OpenAI response:', parseError);
         
-        // Try to extract JSON using regex as fallback
-        const jsonMatch = content.match(/({[\s\S]*})/);
-        if (jsonMatch) {
-          return JSON.parse(jsonMatch[0]);
-        }
+      //   // Try to extract JSON using regex as fallback
+      //   const jsonMatch = content.match(/({[\s\S]*})/);
+      //   if (jsonMatch) {
+      //     return JSON.parse(jsonMatch[0]);
+      //   }
         
-        throw new Error('Failed to parse AI response');
-      }
+      //   throw new Error('Failed to parse AI response');
+      // }
     } catch (error) {
       logger.error('Error in OpenAI service:', error);
       throw error;

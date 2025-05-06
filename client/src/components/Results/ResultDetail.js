@@ -8,10 +8,8 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Divider,
   Card,
   CardContent,
-  CardActionArea,
   CardMedia,
   Tabs,
   Tab,
@@ -22,7 +20,6 @@ import {
   TableHead,
   TableRow,
   Alert,
-  Link
 } from '@mui/material';
 import {
   Insights,
@@ -72,7 +69,7 @@ function ResultDetail() {
     const fetchResultDetails = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/api/results/${resultId}`);
+        const response = await api.get(`/api/news/results/${resultId}`);
         setResult(response.data.result);
         
         // Fetch associated task

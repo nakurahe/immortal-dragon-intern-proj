@@ -40,6 +40,6 @@ const newsResultSchema = new mongoose.Schema({
   }
 });
 
-const NewsResult = mongoose.model('NewsResult', newsResultSchema);
+const NewsResult = mongoose.model('newsresults', newsResultSchema);
 
 module.exports = NewsResult;
