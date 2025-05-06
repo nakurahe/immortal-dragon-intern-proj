@@ -24,7 +24,7 @@ import {
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { parse, format } from 'date-fns';
+import { format } from 'date-fns';
 import api from '../../services/api';
 
 // Available news categories
@@ -38,13 +38,15 @@ const NEWS_CATEGORIES = [
   'technology'
 ];
 
+const COMMON_RESOURCES = ['bbc-news', 'cnn', 'fox-news', 'the-washington-post'];
+
 function CreateTask() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     keywords: [],
     categories: ['general'],
-    sources: [],
+    sources: COMMON_RESOURCES,
     schedule: {
       frequency: 'daily',
       timeOfDay: '09:00',

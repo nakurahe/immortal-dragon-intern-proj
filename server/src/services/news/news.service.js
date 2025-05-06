@@ -1,36 +1,37 @@
-const axios = require('axios');
+const NewsAPI = require('newsapi');
 const { logger } = require('../../utils/logger');
 
 class NewsService {
   constructor() {
-    this.apiKey = process.env.NEWS_API_KEY;
-    this.baseUrl = 'https://newsapi.org/v2';
+    this.newsapi = new NewsAPI(process.env.NEWS_API_KEY);
   }
 
-  async fetchNewsByKeywords(keywords, categories, sources, fromDate, page = 1, pageSize = a10) {
+  async fetchNewsByKeywords(keywords, sources, fromDate, page = 1, pageSize = 10) {
     try {
       // Prepare query parameters
       const keywordQuery = keywords.join(' OR ');
-      const categoriesQuery = categories ? categories.join(',') : '';
       const sourcesQuery = sources ? sources.join(',') : '';
       
       const from = fromDate || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // Default to 1 week ago
       
-      // Make request to News API
-      const response = await axios.get(`${this.baseUrl}/everything`, {
-        params: {
-          q: keywordQuery,
-          sources: sourcesQuery,
-          from,
-          language: 'en',
-          sortBy: 'publishedAt',
-          page,
-          pageSize,
-          apiKey: this.apiKey
-        }
+      // Make request to News API using official client
+      const response = await this.newsapi.v2.everything({
+        q: keywordQuery,
+        sources: sourcesQuery,
+        from,
+        language: 'en',
+        sortBy: 'publishedAt',
+        page,
+        pageSize
       });
       
-      return response.data;
+      console.log('keywordQuery', keywordQuery);
+      console.log('sourcesQuery', sourcesQuery);
+      console.log('from', from);
+      console.log('page', page);
+      console.log('pageSize', pageSize);
+      console.log('Response from News API:', response);
+      return response;
     } catch (error) {
       logger.error('Error fetching news:', error);
       throw error;
@@ -39,17 +40,15 @@ class NewsService {
 
   async fetchNewsByCategory(category, page = 1, pageSize = 10) {
     try {
-      const response = await axios.get(`${this.baseUrl}/top-headlines`, {
-        params: {
-          category,
-          country: 'us', // Default to US
-          page,
-          pageSize,
-          apiKey: this.apiKey
-        }
+      const response = await this.newsapi.v2.topHeadlines({
+        category,
+        country: 'us', // Default to US
+        language: 'en',
+        page,
+        pageSize
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       logger.error('Error fetching news by category:', error);
       throw error;
@@ -58,18 +57,31 @@ class NewsService {
 
   async fetchLatestNews(page = 1, pageSize = 10) {
     try {
-      const response = await axios.get(`${this.baseUrl}/top-headlines`, {
-        params: {
-          country: 'us', // Default to US
-          page,
-          pageSize,
-          apiKey: this.apiKey
-        }
+      const response = await this.newsapi.v2.topHeadlines({
+        country: 'us', // Default to US
+        language: 'en',
+        page,
+        pageSize
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       logger.error('Error fetching latest news:', error);
+      throw error;
+    }
+  }
+  
+  async fetchSources(category = null, language = 'en', country = 'us') {
+    try {
+      const response = await this.newsapi.v2.sources({
+        category,
+        language,
+        country
+      });
+      
+      return response;
+    } catch (error) {
+      logger.error('Error fetching news sources:', error);
       throw error;
     }
   }

@@ -13,7 +13,6 @@ import {
   CardContent,
   CardActions,
   Alert,
-  IconButton,
   Tooltip
 } from '@mui/material';
 import {
@@ -70,6 +69,10 @@ function TaskDetail() {
       setRunningTask(true);
       await api.post(`/api/tasks/${id}/run`);
       // Show success message
+
+      // After running the task, we should fetch the results
+      const resultsResponse = await api.get(`/api/news/task/${id}/results?limit=5`);
+      setRecentResults(resultsResponse.data.results);
     } catch (err) {
       console.error('Error running task:', err);
       // Show error message

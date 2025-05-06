@@ -45,7 +45,7 @@ function Dashboard() {
         // Fetch recent results (if tasks exist)
         if (tasksResponse.data.tasks.length > 0) {
           const resultPromises = tasksResponse.data.tasks.slice(0, 3).map(task => 
-            api.get(`/api/task/${task._id}/results?limit=1`)
+            api.get(`/api/news/task/${task._id}/results?limit=1`)
           );
           
           const resultsResponses = await Promise.all(resultPromises);

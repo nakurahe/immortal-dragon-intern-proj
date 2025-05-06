@@ -11,7 +11,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Divider,
   Pagination,
   FormControl,
   InputLabel,
@@ -35,29 +34,40 @@ function Results() {
 
   // Fetch results
   useEffect(() => {
+    let isMounted = true;
     const fetchResults = async () => {
       try {
         setLoading(true);
         
         // Fetch task details
         const taskResponse = await api.get(`/api/tasks/${taskId}`);
-        setTask(taskResponse.data.task);
+        if (isMounted) setTask(taskResponse.data.task);
         
         // Fetch results
         const skip = (page - 1) * limit;
-        const resultsResponse = await api.get(`/api/task/${taskId}/results?limit=${limit}&skip=${skip}`);
+        const resultsResponse = await api.get(`/api/news/task/${taskId}/results?limit=${limit}&skip=${skip}`);
         
-        setResults(resultsResponse.data.results);
-        setTotalPages(Math.ceil(resultsResponse.data.pagination.total / limit));
+        if (isMounted) {
+          setResults(resultsResponse.data.results);
+          setTotalPages(Math.ceil(resultsResponse.data.pagination.total / limit));
+        }
       } catch (err) {
-        console.error('Error fetching results:', err);
-        setError('Failed to load results. Please try again later.');
+        if (isMounted) {
+          console.error('Error fetching results:', err);
+          console.error('Response data:', err.response?.data);
+          console.error('Status:', err.response?.status);
+          setError(`Failed to load results: ${err.response?.data?.message || err.message}`);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchResults();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [taskId, page, limit]);
 
   // Handle page change

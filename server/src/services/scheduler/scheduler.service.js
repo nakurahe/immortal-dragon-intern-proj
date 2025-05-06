@@ -15,11 +15,10 @@ let schedulerInstance = null;
 async function executeTask(task) {
   try {
     logger.info(`Executing task: ${task.name} (${task._id})`);
-    
+    console.log(`Task details: ${JSON.stringify(task)}`);
     // Fetch news based on task configuration
     const newsResponse = await newsService.fetchNewsByKeywords(
       task.keywords,
-      task.categories,
       task.sources,
       new Date(task.lastRun || Date.now() - 24 * 60 * 60 * 1000) // From last run or 24h ago
     );
