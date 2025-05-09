@@ -41,7 +41,7 @@ function Dashboard() {
         // Fetch tasks
         const tasksResponse = await api.get('/api/tasks');
         setTasks(tasksResponse.data.tasks);
-        
+        console.log('Fetched tasks:', tasksResponse.data.tasks);
         // Fetch recent results (if tasks exist)
         if (tasksResponse.data.tasks.length > 0) {
           const resultPromises = tasksResponse.data.tasks.slice(0, 3).map(task => 
@@ -49,11 +49,12 @@ function Dashboard() {
           );
           
           const resultsResponses = await Promise.all(resultPromises);
+          console.log('Fetched results responses:', resultsResponses);
           const allResults = resultsResponses
             .flatMap(res => res.data.results)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .slice(0, 5);
-          
+          console.log('Fetched recent results:', allResults);
           setRecentResults(allResults);
         }
       } catch (err) {

@@ -5,9 +5,11 @@ function TrendingTopics({ results }) {
   // Extract and combine trending topics from all results
   const trendingTopics = useMemo(() => {
     if (!results || results.length === 0) {
+      console.log('No results provided for trending topics.');
       return [];
     }
 
+    console.log('Extracting trending topics from results:', results);
     // Collect all topics from results
     const topics = results
       .flatMap(result => result.aiAnalysis?.trendingTopics || [])

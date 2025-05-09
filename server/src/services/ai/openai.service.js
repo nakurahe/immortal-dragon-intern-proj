@@ -46,11 +46,13 @@ class OpenAIService {
             {"topic": "string", "weight": number}
           ]
         }
+
+        ONLY RETURN THE JSON RESPONSE **WITHOUT ANY ADDITIONAL TEXT OR BACKTICK**.
       `;
       
       // Call OpenAI API
       const response = await this.openai.chat.completions.create({
-        model: "microsoft/phi-4-reasoning-plus:free",
+        model: "deepseek/deepseek-prover-v2:free",
         messages: [
           {
             role: "system",
@@ -68,19 +70,19 @@ class OpenAIService {
       // Parse the response to get JSON
       const content = response.choices[0].message.content;
       console.log('OpenAI response:', content);
-      // try {
-      //   return JSON.parse(content);
-      // } catch (parseError) {
-      //   logger.error('Error parsing OpenAI response:', parseError);
+      try {
+        return JSON.parse(content);
+      } catch (parseError) {
+        logger.error('Error parsing OpenAI response:', parseError);
         
-      //   // Try to extract JSON using regex as fallback
-      //   const jsonMatch = content.match(/({[\s\S]*})/);
-      //   if (jsonMatch) {
-      //     return JSON.parse(jsonMatch[0]);
-      //   }
+        // Try to extract JSON using regex as fallback
+        const jsonMatch = content.match(/({[\s\S]*})/);
+        if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]);
+        }
         
-      //   throw new Error('Failed to parse AI response');
-      // }
+        throw new Error('Failed to parse AI response');
+      }
     } catch (error) {
       logger.error('Error in OpenAI service:', error);
       throw error;
@@ -95,7 +97,7 @@ class OpenAIService {
   async processChat(messages) {
     try {
       const response = await this.openai.chat.completions.create({
-        model: "microsoft/phi-4-reasoning-plus:free",
+        model: "deepseek/deepseek-prover-v2:free",
         messages: [
           {
             role: "system",
@@ -107,6 +109,7 @@ class OpenAIService {
         max_tokens: 800
       });
       
+      console.log('OpenAI chat response:', response.choices[0].message.content);
       return response.choices[0].message.content;
     } catch (error) {
       logger.error('Error in OpenAI chat service:', error);

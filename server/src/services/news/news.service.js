@@ -25,12 +25,12 @@ class NewsService {
         pageSize
       });
       
-      console.log('keywordQuery', keywordQuery);
-      console.log('sourcesQuery', sourcesQuery);
-      console.log('from', from);
-      console.log('page', page);
-      console.log('pageSize', pageSize);
-      console.log('Response from News API:', response);
+      // console.log('keywordQuery', keywordQuery);
+      // console.log('sourcesQuery', sourcesQuery);
+      // console.log('from', from);
+      // console.log('page', page);
+      // console.log('pageSize', pageSize);
+      // console.log('Response from News API:', response);
       return response;
     } catch (error) {
       logger.error('Error fetching news:', error);

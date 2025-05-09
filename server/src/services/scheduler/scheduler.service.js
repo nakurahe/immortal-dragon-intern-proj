@@ -37,7 +37,7 @@ async function executeTask(task) {
     
     // Process articles with AI
     const aiAnalysis = await openaiService.analyzeNews(newsResponse.articles);
-    
+    console.log('AI Analysis:', aiAnalysis);
     // Save results to database
     const newsResult = new NewsResult({
       task: task._id,
