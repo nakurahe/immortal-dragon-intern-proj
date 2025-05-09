@@ -1,4 +1,4 @@
-# Immortal Dragon Intern Project: News Analyzer - System Design Document
+# Immortal Dragon Intern Project: News Analyzer - AI-powered News Analysis Application
 
 ## 1. System Overview
 

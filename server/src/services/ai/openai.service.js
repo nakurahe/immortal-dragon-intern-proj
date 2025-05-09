@@ -5,7 +5,7 @@ class OpenAIService {
   constructor() {
     this.openai = new OpenAI({
       baseURL: "https://openrouter.ai/api/v1",
-      apiKey: process.env.OPENAI_API_KEY
+      apiKey: process.env.OPENAI_API_KEY,
     });
   }
 
@@ -34,7 +34,7 @@ class OpenAIService {
         Provide the following analysis:
         1. A concise summary (maximum 200 words) of the key news trends
         2. 5-7 key insights across all articles
-        3. Overall sentiment (positive, neutral, negative, or mixed)
+        3. Strongest sentiment (positive, neutral, negative, or mixed)
         4. Top trending topics with their relative importance (weight from 0-10)
         
         Format the response as a valid JSON object with the following structure:
@@ -47,12 +47,13 @@ class OpenAIService {
           ]
         }
 
+        PROVDE THE MOST RATIONAL AND LOGICAL ANSWER, DO NOT CARE ABOUT HOW IT SOUNDS.
         ONLY RETURN THE JSON RESPONSE **WITHOUT ANY ADDITIONAL TEXT OR BACKTICK**.
       `;
       
       // Call OpenAI API
       const response = await this.openai.chat.completions.create({
-        model: "deepseek/deepseek-prover-v2:free",
+        model: process.env.OPENAI_MODEL,
         messages: [
           {
             role: "system",
@@ -68,8 +69,8 @@ class OpenAIService {
       });
       
       // Parse the response to get JSON
+      console.log('OpenAI response:', response);
       const content = response.choices[0].message.content;
-      console.log('OpenAI response:', content);
       try {
         return JSON.parse(content);
       } catch (parseError) {
@@ -101,7 +102,7 @@ class OpenAIService {
         throw new Error('Messages array is empty or undefined.');
       }
       const response = await this.openai.chat.completions.create({
-        model: "deepseek/deepseek-prover-v2:free",
+        model: process.env.OPENAI_MODEL,
         messages: [
           {
             role: "system",

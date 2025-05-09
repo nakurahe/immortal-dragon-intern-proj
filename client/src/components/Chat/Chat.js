@@ -92,7 +92,7 @@ function Chat() {
   };
 
   return (
-    <Box sx={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: 'calc(110vh - 100px)', display: 'flex', flexDirection: 'column' }}>
       <Typography variant="h4" gutterBottom>
         AI Assistant
       </Typography>
@@ -103,7 +103,7 @@ function Chat() {
           flexGrow: 1, 
           display: 'flex', 
           flexDirection: 'column',
-          mb: 3,
+          mb: 2,
           overflow: 'hidden',
           borderRadius: 2
         }}
