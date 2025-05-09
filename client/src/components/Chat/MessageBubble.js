@@ -38,12 +38,11 @@ function MessageBubble({ message, isUser }) {
         }}
       >
         <Typography variant="body1" component="div">
-          {/* Use ReactMarkdown to render markdown in AI messages */}
           {isUser ? (
             message.content
           ) : (
             <ReactMarkdown>
-              {message.content}
+              {message.content || ''}
             </ReactMarkdown>
           )}
         </Typography>

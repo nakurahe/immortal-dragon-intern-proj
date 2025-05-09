@@ -6,32 +6,32 @@ import {
   TextField,
   IconButton,
   CircularProgress,
-  Divider,
-  Chip,
-  Avatar,
+  Divider, 
   Card,
   CardContent
 } from '@mui/material';
-import { Send, SmartToy, Person } from '@mui/icons-material';
+import { Send } from '@mui/icons-material';
 import api from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
 import MessageBubble from './MessageBubble';
 
 function Chat() {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: 'Hello! I can help you configure and manage your news analysis tasks. What would you like to do today?'
-    }
-  ]);
+  const [messages, setMessages] = useState(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    return savedMessages ? JSON.parse(savedMessages) : [
+      {
+        role: 'assistant',
+        content: 'Hello! I can help you configure and manage your news analysis tasks. What would you like to do today?'
+      }
+    ];
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const { currentUser } = useAuth();
 
   // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
+    localStorage.setItem('chatMessages', JSON.stringify(messages)); // Save messages to localStorage
   }, [messages]);
 
   const scrollToBottom = () => {

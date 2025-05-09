@@ -96,6 +96,10 @@ class OpenAIService {
    */
   async processChat(messages) {
     try {
+      // Validate messages
+      if (!messages || messages.length === 0) {
+        throw new Error('Messages array is empty or undefined.');
+      }
       const response = await this.openai.chat.completions.create({
         model: "deepseek/deepseek-prover-v2:free",
         messages: [
@@ -108,7 +112,12 @@ class OpenAIService {
         temperature: 0.7,
         max_tokens: 800
       });
-      
+
+      console.log('OpenAI chat response:', response);
+      // Validate response
+      if (!response || !response.choices || response.choices.length === 0) {
+        throw new Error('Invalid response from OpenAI API.');
+      }
       console.log('OpenAI chat response:', response.choices[0].message.content);
       return response.choices[0].message.content;
     } catch (error) {

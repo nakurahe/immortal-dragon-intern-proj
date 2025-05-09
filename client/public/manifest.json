@@ -1,0 +1,21 @@
+{
+  "short_name": "NewsAnalyzer",
+  "name": "News Analyzer - AI-powered News Analysis Application",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "description": "Analyze news articles with AI to extract insights, trends, and sentiment."
+}
