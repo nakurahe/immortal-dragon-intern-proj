@@ -61,11 +61,13 @@ function TrendingTopics({ results }) {
     <Box sx={{ py: 2 }}>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
         {trendingTopics.map(({ topic, weight }) => {
-          // Calculate size based on weight relative to max weight
+          // Calculate size and color intensity based on weight relative to max weight
           const relativeSize = 0.8 + (weight / maxWeight) * 0.7;
           const fontSize = `${relativeSize}rem`;
           const intensity = Math.min(900, Math.floor((weight / maxWeight) * 900));
-          
+          const fontColorIntensity = Math.floor((weight / maxWeight) * 255); // Scale from 0 to 255
+          const fontColor = `rgb(${255 - fontColorIntensity}, ${255 - fontColorIntensity}, ${255 - fontColorIntensity})`; // Lighter to darker
+
           return (
             <Chip
               key={topic}
@@ -74,7 +76,7 @@ function TrendingTopics({ results }) {
                 fontSize,
                 fontWeight: 500,
                 bgcolor: `primary.${intensity}`,
-                color: intensity > 500 ? 'white' : 'inherit',
+                color: fontColor, // Dynamically set font color
                 m: 0.5
               }}
             />

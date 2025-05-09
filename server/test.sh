@@ -24,20 +24,25 @@ TOKEN=$(curl -s -X POST http://localhost:5000/api/auth/login \
 #   -H 'Content-Type: application/json' \
 #   -H "Authorization: Bearer $TOKEN"
 
-# Get one task
-curl -X GET http://localhost:5000/api/tasks \
+# # Get one task
+# curl -X GET http://localhost:5000/api/tasks \
+#   -H 'Content-Type: application/json' \
+#   -H "Authorization: Bearer $TOKEN"
+
+# curl -X GET https://newsapi.org/v2/everything \
+#   -H 'Content-Type: application/json' \
+#   -d '{
+#     "q": "Japan",
+#     "from": "2025-05-06T21:55:53.349Z",
+#     "sources": "bbc-news,cnn,fox-news,the-washington-post",
+#     "language": 'en',
+#     "sortBy": 'publishedAt',
+#     "page": "1",
+#     "pageSize": "10",
+#     "apiKey": "6a3c92a44050458bbb3efb9b8a87c008"
+#   }'
+
+# Get statistics
+curl -X GET http://localhost:5000/api/news/stat \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $TOKEN"
-
-curl -X GET https://newsapi.org/v2/everything \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "q": "Japan",
-    "from": "2025-05-06T21:55:53.349Z",
-    "sources": "bbc-news,cnn,fox-news,the-washington-post",
-    "language": 'en',
-    "sortBy": 'publishedAt',
-    "page": "1",
-    "pageSize": "10",
-    "apiKey": "6a3c92a44050458bbb3efb9b8a87c008"
-  }'

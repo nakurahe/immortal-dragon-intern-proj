@@ -28,6 +28,8 @@ import TrendingTopics from './TrendingTopics';
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [recentResults, setRecentResults] = useState([]);
+  const [results, setResults] = useState(0);
+  const [articles, setArticles] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
@@ -42,6 +44,13 @@ function Dashboard() {
         const tasksResponse = await api.get('/api/tasks');
         setTasks(tasksResponse.data.tasks);
         console.log('Fetched tasks:', tasksResponse.data.tasks);
+
+        // Fetch results and articles count
+        const countResponse = await api.get('/api/news/stat');
+        setResults(countResponse.data.totalResults);
+        setArticles(countResponse.data.totalArticles);
+        console.log('Fetched results and articles count:', countResponse.data);
+
         // Fetch recent results (if tasks exist)
         if (tasksResponse.data.tasks.length > 0) {
           const resultPromises = tasksResponse.data.tasks.slice(0, 3).map(task => 
@@ -98,7 +107,11 @@ function Dashboard() {
         </Paper>
       )}
       
-      <DashboardSummary taskCount={tasks.length} />
+      <DashboardSummary 
+        taskCount={tasks.length} 
+        resultCount={results} 
+        articleCount={articles} 
+      />
       
       <Grid container spacing={3} sx={{ mt: 2 }}>
         {/* Recent Tasks */}

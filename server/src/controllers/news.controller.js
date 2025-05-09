@@ -154,3 +154,33 @@ exports.getLatestNewsByCategory = async (req, res) => {
     });
   }
 };
+
+/**
+ * Get statistics: total number of analyses and articles
+ */
+exports.getStatistics = async (req, res) => {
+  try {
+    const stats = await NewsResult.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalResults: { $sum: 1 }, // Count the number of results
+          totalArticles: { $sum: { $size: "$articles" } } // Sum the length of the articles array
+        }
+      }
+    ]);
+
+    const { totalResults = 0, totalArticles = 0 } = stats[0] || {};
+
+    res.status(200).json({
+      totalResults,
+      totalArticles
+    });
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
+    res.status(500).json({
+      message: 'Error fetching statistics',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};

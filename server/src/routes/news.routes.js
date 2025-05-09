@@ -12,4 +12,7 @@ router.get('/results/:resultId', newsController.getResult);
 router.post('/search', newsController.searchNews);
 router.get('/category/:category', newsController.getLatestNewsByCategory);
 
+// Statistic routes
+router.get('/stat', newsController.getStatistics);
+
 module.exports = router;
