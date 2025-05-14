@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box } from '@mui/material';
 
 function TopicCloud({ topics }) {
@@ -8,24 +8,46 @@ function TopicCloud({ topics }) {
     // Find max weight for scaling
     const maxWeight = Math.max(...topics.map(t => t.weight));
     
-    // Calculate positions and sizes
+    // Calculate positions and sizes using a more condensed spiral layout
+    let lastX = 0;
+    let lastY = 0;
+    const angleStep = 0.35; // Controls compactness of spiral
+    
     return topics.map((topic, index) => {
-      const relativeSize = 14 + (topic.weight / maxWeight) * 20; // Font size between 14 and 34px
-      const opacity = 0.3 + (topic.weight / maxWeight) * 0.7; // Opacity between 0.3 and 1
+      const relativeSize = 12 + (topic.weight / maxWeight) * 16; // Reduced font size range (12-28px)
+      const opacity = 0.4 + (topic.weight / maxWeight) * 0.6; // Opacity between 0.4 and 1
       
-      // Generate a somewhat random position (but deterministic based on index)
-      const angle = (index / topics.length) * 2 * Math.PI;
-      const radius = 40 + Math.sin(index * 13) * 30; // Vary the distance from center
+      // Generate position using spiral layout for more efficient space usage
+      const angle = index * angleStep;
+      // Reduce radius range and make it grow more slowly
+      const radius = 15 + Math.sqrt(index) * 5;
       
+      // Calculate new position
       const x = 50 + Math.cos(angle) * radius;
       const y = 50 + Math.sin(angle) * radius;
+      
+      // Prevent overlaps by checking distance to last point
+      // Simple collision avoidance (improved versions would check all points)
+      const minDistance = 10;
+      const distToLast = Math.sqrt(Math.pow(x - lastX, 2) + Math.pow(y - lastY, 2));
+      
+      // Adjust position if too close to last point
+      let finalX = x;
+      let finalY = y;
+      if (index > 0 && distToLast < minDistance) {
+        finalX = lastX + (minDistance * (x - lastX) / distToLast);
+        finalY = lastY + (minDistance * (y - lastY) / distToLast);
+      }
+      
+      lastX = finalX;
+      lastY = finalY;
       
       return {
         ...topic,
         fontSize: relativeSize,
         opacity,
-        x,
-        y
+        x: finalX,
+        y: finalY
       };
     });
   }, [topics]);
@@ -42,7 +64,8 @@ function TopicCloud({ topics }) {
         position: 'relative',
         bgcolor: 'background.paper',
         borderRadius: 1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        padding: '8px' // Add padding to prevent clipping at edges
       }}
     >
       {processedTopics.map((topic, index) => (
@@ -61,9 +84,10 @@ function TopicCloud({ topics }) {
             whiteSpace: 'nowrap',
             textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
             transition: 'all 0.3s ease',
+            padding: '2px', // Add minimal padding
             '&:hover': {
               transform: 'translate(-50%, -50%) scale(1.1)',
-              zIndex: 2
+              zIndex: 10 // Higher z-index when hovering
             }
           }}
         >
